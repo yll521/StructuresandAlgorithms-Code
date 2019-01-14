@@ -50,9 +50,14 @@ buildTree([3,9,20,15,7],[9,3,15,20,7])
 function buildTree(preorder,inorder){
     let treeArr = [];
     let curRoot = preorder[0];// 根节点
-    departArr(curRoot,1,0)// 令生成的curIndex=1
-    console.log(treeArr)
-    function departArr(curRoot,isRight,prevIndex){
+    departArr(inorder,curRoot,1,0)// 参数配置令生成的curIndex=1
+    /****
+     * arr: 预被root分割成两个子节点数组的本层数组
+     * curRoot：本层节点，(下层的父节点)
+     * isRight：当前数组是否为右节点 
+     * prevIndex直接上级父节点的index
+     */
+    function departArr(arr,curRoot,isRight,prevIndex){
         //base-case 如果treeArr里包含了preorder的每个数 则返回
         // 无法通过previndex确定
         let count = 0;
@@ -64,15 +69,18 @@ function buildTree(preorder,inorder){
         if(count==preorder.length){
             return ;
         }
-        let rootIndex = inorder.indexOf(curRoot);// 下标
-        let lArr = inorder.slice(0).splice(0,rootIndex);//截取curRoot左边的
-        let rArr = inorder.slice(0).splice(rootIndex+1);// 截取curRoot右边的
         let curIndex = 2*prevIndex+isRight;
+        //如果被分的数组长度为1 则无需再分了
+        if(arr.length>1){
+            let rootIndex = arr.indexOf(curRoot);// 下标
+            let lArr = arr.slice(0).splice(0,rootIndex);//截取curRoot左边的
+            let rArr = arr.slice(0).splice(rootIndex+1);// 截取curRoot右边的
+            let lRoot = findRoot(lArr);
+            let rRoot = findRoot(rArr);
+            departArr(lArr,lRoot,0,curIndex);
+            departArr(rArr,rRoot,1,curIndex);
+        }
         treeArr[curIndex] = curRoot;// 数组从1开始
-        let lRoot = findRoot(lArr);
-        let rRoot = findRoot(rArr);
-        departArr(lRoot,0,curIndex);
-        departArr(rRoot,1,curIndex);
     }
 
     function findRoot(arr){
