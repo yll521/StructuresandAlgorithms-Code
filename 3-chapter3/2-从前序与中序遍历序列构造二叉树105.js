@@ -45,12 +45,27 @@ function TreeNode(val){
  * 
  * 然后依据得到的数组 遍历得到tree
  */
+/****
+ * 根据得到的数组 生成一个tree
+ * tree结构： 
+ * node:{
+ *  this.val = val;
+ *  this.left =  xxnode;
+ *  this.right = xxnode;
+ * }
+ */
 // 传入的两个参数是数组类型
-buildTree([3,9,20,15,7],[9,3,15,20,7])
+buildTree([],[])
 function buildTree(preorder,inorder){
+    if(preorder.length<1&&inorder.length<1){
+        return []
+    }
     let treeArr = [];
     let curRoot = preorder[0];// 根节点
+    let head = new TreeNode(curRoot);
     departArr(inorder,curRoot,1,0)// 参数配置令生成的curIndex=1
+    arr2Tree(head,1);// 1表示treeArr是从1开始的
+    return head;
     /****
      * arr: 预被root分割成两个子节点数组的本层数组
      * curRoot：本层节点，(下层的父节点)
@@ -98,5 +113,22 @@ function buildTree(preorder,inorder){
                 return curItem
             }
         }
+    }
+
+    function arr2Tree(node,index){
+        let len = treeArr.length;
+        if(index>=len-1){
+            return;
+        }
+        let lIndex = 2*index;
+        let rIndex = 2*index+1;
+        node.left = treeArr[lIndex]?new TreeNode(treeArr[lIndex]):null;
+        node.right = treeArr[rIndex]?new TreeNode(treeArr[rIndex]):null;
+        if(node.left){
+            lIndex<len&&arr2Tree(node.left,lIndex);
+        }
+        if(node.right){
+            rIndex<len&&arr2Tree(node.right,rIndex);
+        }   
     }
 }
