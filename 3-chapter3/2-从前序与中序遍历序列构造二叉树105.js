@@ -84,13 +84,19 @@ function buildTree(preorder,inorder){
     }
 
     function findRoot(arr){
-        let minIndex = Number.MAX_VALUE;
         // 遍历当前arr 在preorder数组里找arr元素中最靠前的 是为当前层的根元素
         // 默认树中的数不会重复..
-        arr.forEach(item => {
-            let curIndex = preorder.indexOf(item);
-            minIndex = minIndex<curIndex?minIndex:curIndex;
-        });
-        return preorder[minIndex];
+        // let minIndex = Number.MAX_VALUE;
+        // arr.forEach(item => {
+        //     let curIndex = preorder.indexOf(item);
+        //     minIndex = minIndex<curIndex?minIndex:curIndex;
+        // });
+        // return preorder[minIndex]
+        for(let i=0;i<preorder.length;i++){
+            let curItem = preorder[i];
+            if(arr.includes(curItem)){
+                return curItem
+            }
+        }
     }
 }
