@@ -44,6 +44,10 @@ function TreeNode(val){
  * [3,9,20,null,null,15,7]
  * 
  * 然后依据得到的数组 遍历得到tree
+ * 
+ * ===->
+ *  通过199/203测试用例
+ *  ?
  */
 /****
  * 根据得到的数组 生成一个tree
@@ -57,8 +61,8 @@ function TreeNode(val){
 // 传入的两个参数是数组类型
 buildTree([],[])
 function buildTree(preorder,inorder){
-    if(preorder.length<1&&inorder.length<1){
-        return []
+    if(preorder.length<1||inorder.length<1){
+        return null;
     }
     let treeArr = [];
     let curRoot = preorder[0];// 根节点
