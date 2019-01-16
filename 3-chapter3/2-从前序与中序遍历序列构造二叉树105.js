@@ -136,3 +136,22 @@ function buildTree(preorder,inorder){
         }   
     }
 }
+
+/***
+ * 社区
+ * 思想还是一致，在前序(根左右)找根节点 中序(左根右)根据根节点区分左右子树
+ * 但是人家写的真的很精炼..
+ */
+function buildTree(preorder,inorder){
+    if(preorder.length<1||inorder.length<1){
+        return null;
+    }
+    let root = preorder[0];//在前序里找到的根节点
+    let head = new TreeNode(root);
+    let pos = inorder.indexOf(root);
+    // 前序根左右的区分，根据中序的pos值，
+    // 在前序里去掉首个根 截取到pos处(post也相当于左的0个数了)
+    head.left = buildTree(preorder.slice(1,pos+1),inorder.slice(0,pos));
+    head.right = buildTree(preorder.slice(pos+1),inorder.slice(1+pos));
+    return head
+}
