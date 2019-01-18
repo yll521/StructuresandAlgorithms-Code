@@ -141,6 +141,7 @@ function buildTree(preorder,inorder){
  * 社区
  * 思想还是一致，在前序(根左右)找根节点 中序(左根右)根据根节点区分左右子树
  * 但是人家写的真的很精炼..
+ * 32.64%
  */
 function buildTree(preorder,inorder){
     if(preorder.length<1||inorder.length<1){
@@ -154,4 +155,39 @@ function buildTree(preorder,inorder){
     head.left = buildTree(preorder.slice(1,pos+1),inorder.slice(0,pos));
     head.right = buildTree(preorder.slice(pos+1),inorder.slice(1+pos));
     return head
+}
+
+/***
+ * 精简
+ * slice耗费性能，优化？
+ */
+var buildTree = function(preorder, inorder) {
+    // eslint-disable-next-line
+    if (!Array.isArray(preorder) || !Array.isArray(inorder) || !preorder.length || !inorder.length || preorder.length !== inorder.length) {
+        return null;
+    }
+
+    return creator(preorder, inorder, 0, 0, inorder.length - 1);
+}
+
+/**
+ * 构造一棵树，为了不使用 slice 影响性能，传入所有值，用下标来标出构造的树所使用的元素
+ * @param {*} preorder 所有值
+ * @param {*} inorder 所有值
+ * @param {*} preStart 前序的开始位置
+ * @param {*} inStart 中序的开始位置
+ * @param {*} inEnd 中序的结束位置
+ */
+function creator(preorder, inorder, preStart, inStart, inEnd) {
+    if (preStart > preorder.length - 1 || inStart > inEnd) {
+        return null;
+    }
+
+    const root = preorder[preStart];
+    const index = inorder.indexOf(root);
+    const rootNode = new TreeNode(root);
+    rootNode.left = creator(preorder, inorder, preStart + 1, inStart, index - 1);
+    rootNode.right = creator(preorder, inorder, preStart + 1 + index - inStart, index + 1, inEnd);
+
+    return rootNode;
 }
